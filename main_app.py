@@ -2,10 +2,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from utils.data_processor import DataProcessor
-from utils.visualizer import Visualizer
-from utils.model_builder import ModelBuilder
-from utils.report_generator import ReportGenerator
+from data_processor import DataProcessor
+from visualizer import Visualizer
+from model_builder import ModelBuilder
+from report_generator import ReportGenerator
 
 def main():
     st.set_page_config(page_title="👌Michuu AutoML", layout="wide")
