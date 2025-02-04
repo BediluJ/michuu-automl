@@ -1,6 +1,6 @@
 # Michuu-AutoML
 
-Welcome to the Michuu AutoML project! This repository showcases an automated machine learning (AutoML) application deployed using Streamlit.
+Welcome to the Michuu AutoML project! This repository showcases an automated machine learning (AutoML) application deployed using Streamlit. Follow https://michuu-automl.streamlit.app/
 
 ## Overview
 
@@ -49,4 +49,4 @@ This project is licensed under the MIT License.
 
 For any questions or feedback, please open an issue or contact us.
 
-Enjoy using Michuu AutoML!   
+Enjoy using Michuu AutoML! https://michuu-automl.streamlit.app/
