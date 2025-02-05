@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Michuu AutoML Report</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .section { margin: 40px 0; padding: 20px; border-bottom: 1px solid #eee; }
+        .plot { margin: 30px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
+        th { background-color: #f5f5f5; }
+        .metrics-table { max-width: 600px; }
+        img { max-width: 80%; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <h1>Michuu AutoML Report</h1>
+    
+    <!-- Dataset Overview -->
+    <div class="section">
+        <h2>Dataset Overview</h2>
+        <p><strong>Original Shape:</strong> {{ df_info.original_shape[0] }} rows × {{ df_info.original_shape[1] }} columns</p>
+        <p><strong>Missing Values:</strong> {{ df_info.missing_values }}</p>
+        <h3>Column Types:</h3>
+        <ul>
+            <li><strong>Numerical:</strong> {{ df_info.column_types.numerical|join(', ') }}</li>
+            <li><strong>Categorical:</strong> {{ df_info.column_types.categorical|join(', ') }}</li>
+            <li><strong>Text:</strong> {{ df_info.column_types.text|join(', ') }}</li>
+        </ul>
+    </div>
+
+    <!-- Exploratory Data Analysis -->
+    <div class="section">
+        <h2>Exploratory Data Analysis</h2>
+        {% for html in plot_html %}
+        <div class="plot">{{ html|safe }}</div>
+        {% endfor %}
+        {% for img in plot_images %}
+        <div class="plot">
+            <img src="data:image/png;base64,{{ img }}">
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Model Performance -->
+    <div class="section">
+        <h2>Model Performance</h2>
+        <div class="metrics-table">
+            <h3>{{ model_info.model_type|title }} Results</h3>
+            <p><strong>Best Model:</strong> {{ model_info.champion_model.Model }}</p>
+            <table>
+                {% for metric, value in model_info.champion_model.items() %}
+                {% if metric != 'Model' %}
+                <tr>
+                    <td>{{ metric }}</td>
+                    <td>
+                        {% if value is number %}
+                            {{ value|round(3) }}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Model Diagnostics -->
+    <div class="section">
+        <h2>Model Diagnostics</h2>
+        {% if diagnostics %}
+          {% for html in diagnostics.html %}
+          <div class="plot">{{ html|safe }}</div>
+          {% endfor %}
+          {% for img in diagnostics.images %}
+          <div class="plot">
+              <img src="data:image/png;base64,{{ img }}">
+          </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- All Models Comparison -->
+    <div class="section">
+        <h2>All Model Performances</h2>
+        <table>
+            <thead>
+                <tr>
+                    {% for col in model_info.all_models.columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for _, row in model_info.all_models.iterrows() %}
+                <tr>
+                    {% for val in row %}
+                    <td>
+                        {% if val is number %}
+                            {{ val|round(3) }}
+                        {% else %}
+                            {{ val }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
